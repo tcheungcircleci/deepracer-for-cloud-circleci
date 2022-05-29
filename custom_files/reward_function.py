@@ -7,6 +7,10 @@ def reward_function(params):
     distance_from_center = params['distance_from_center']
     track_width = params['track_width']
     steering = abs(params['steering_angle']) # Only need the absolute steering angle
+    steps = params['steps']
+    progress = params['progress']
+    all_wheels_on_track = params['all_wheels_on_track']
+    speed = params['speed']
 
     # Calculate 3 marks that are farther and father away from the center line
     marker_1 = 0.1 * track_width
@@ -29,5 +33,13 @@ def reward_function(params):
     # Penalize reward if the car is steering too much
     if steering > ABS_STEERING_THRESHOLD:
         reward *= 0.8
+
+    if progress in [25,50,75,100]:
+        reward += progress/steps*100
+
+    reward *= speed
+
+    if not all_wheels_on_track:
+        reward *= 1e-3
 
     return float(reward)
