@@ -19,7 +19,7 @@ def reward_function(params):
     reward = math.cos( 2 * (distance_from_center/track_width) * math.pi)
 
     # Higher reward for higher speed
-    reward += (speed/4)-2
+    reward += (speed/4)-0.25
 
     # Steering penality threshold, change the number based on your action space setting
     ABS_STEERING_THRESHOLD = 15
