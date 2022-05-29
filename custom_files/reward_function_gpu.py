@@ -9,9 +9,9 @@ def reward_function(params):
     distance_from_center = params['distance_from_center']
     track_width = params['track_width']
     steering = abs(params['steering_angle']) # Only need the absolute steering angle
-    steps = params['steps']
     progress = params['progress']
     all_wheels_on_track = params['all_wheels_on_track']
+    is_offtrack = params['is_offtrack']
     speed = params['speed']
 
     # Give higher reward if the car is closer to center line and vice versa
@@ -32,6 +32,9 @@ def reward_function(params):
         reward += progress
 
     if not all_wheels_on_track:
+        reward = -5
+
+    if is_offtrack:
         reward = -100
 
     return float(reward)
