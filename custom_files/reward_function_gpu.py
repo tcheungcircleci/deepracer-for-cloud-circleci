@@ -124,7 +124,7 @@ class Reward:
             return [index % array_len for index in range(start, end)]
 
         # Calculate how long car would take for entire lap, if it continued like it did until now
-        def projected_time(first_index, closest_index, step_count, times_list):
+        def get_projected_time(first_index, closest_index, step_count, times_list):
 
             # Calculate how much time has passed since start
             current_actual_time = (step_count-1) / 15
@@ -369,7 +369,7 @@ class Reward:
         STANDARD_TIME = 37
         FASTEST_TIME = 27
         times_list = [row[3] for row in racing_track]
-        projected_time = projected_time(self.first_racingpoint_index, closest_index, steps, times_list)
+        projected_time = get_projected_time(self.first_racingpoint_index, closest_index, steps, times_list)
         try:
             steps_prediction = projected_time * 15 + 1
             reward_prediction = max(1e-3, (-REWARD_PER_STEP_FOR_FASTEST_TIME*(FASTEST_TIME) /
