@@ -448,6 +448,7 @@ class Reward:
 
         # Reward based on how close car is to optimal heading
         direction_diff = racing_direction_diff( optimals[0:2], optimals_second[0:2], [x, y], heading )
+        heading_reward = 0
         if direction_diff <= 10:
             heading_reward = 1.0
         elif 10 < direction_diff <= 30:
@@ -460,6 +461,7 @@ class Reward:
             reward = 1e-3
 
         # progress reward
+        progress_reward = 0
         if progress in [20,40,60,80,100]:
             progress_reward = progress/steps * 10
         reward += progress_reward
