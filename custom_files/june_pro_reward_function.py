@@ -364,6 +364,7 @@ class Reward:
         waypoints = params['waypoints']
         closest_waypoints = params['closest_waypoints']
         is_offtrack = params['is_offtrack']
+        is_reversed = params['is_reversed']
 
         """
         "all_wheels_on_track": Boolean,        # flag to indicate if the agent is on the track
@@ -419,13 +420,13 @@ class Reward:
         reward += distance_reward * DISTANCE_MULTIPLE
 
         ## Reward if speed is close to optimal speed ##
-        SPEED_DIFF_NO_REWARD = 1
-        SPEED_MULTIPLE = 2
-        speed_diff = abs(optimals[2]-speed)
-        if speed_diff <= SPEED_DIFF_NO_REWARD:
+        SPEED_DIFF_NO_REWARD = 1.0
+        SPEED_MULTIPLE = 1
+        speed_diff = optimals[2]-speed
+        if -1.0 < speed_diff <= 1.0:
             # we use quadratic punishment (not linear) bc we're not as confident with the optimal speed
             # so, we do not punish small deviations from optimal speed
-            speed_reward = (1 - (speed_diff/SPEED_DIFF_NO_REWARD)**2)**2
+            speed_reward = 1 - ( speed_diff )**2
         else:
             speed_reward = 0
         reward += speed_reward * SPEED_MULTIPLE
@@ -445,16 +446,23 @@ class Reward:
         #     steps_reward = 0
         # reward += steps_reward
 
-        # Zero reward if obviously wrong direction (e.g. spin)
-        direction_diff = racing_direction_diff(
-            optimals[0:2], optimals_second[0:2], [x, y], heading)
-        if direction_diff > 30:
-            reward = 1e-3
+        # Reward based on how close car is to optimal heading
+        direction_diff = racing_direction_diff( optimals[0:2], optimals_second[0:2], [x, y], heading )
+        if direction_diff <= 10:
+            heading_reward = 1.0
+        elif 10 < direction_diff <= 30:
+            heading_reward = (-1/20)*direction_diff + 1.5
+        reward += heading_reward
             
-        # Zero reward of obviously too slow
+        # Zero reward if obviously too slow
         speed_diff_zero = optimals[2]-speed
-        if speed_diff_zero > 0.5:
+        if speed_diff_zero > 1.0:
             reward = 1e-3
+
+        # progress reward
+        if progress in [20,40,60,80,100]:
+            progress_reward = progress/steps * 10
+        reward += progress_reward
             
         # ## Incentive for finishing the lap in less steps ##
         # REWARD_FOR_FASTEST_TIME = 1500 # should be adapted to track length and other rewards
@@ -467,8 +475,12 @@ class Reward:
         #     finish_reward = 0
         # reward += finish_reward
         
+        # Zero reward if obviously wrong direction (e.g. spin)
+        if direction_diff > 30 or is_reversed == True:
+            reward = 1e-3
+
         ## Zero reward if off track ##
-        if all_wheels_on_track == False:
+        if is_offtrack == True:
             reward = 1e-3
 
         ####################### VERBOSE #######################
