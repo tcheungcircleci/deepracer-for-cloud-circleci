@@ -397,20 +397,20 @@ class Reward:
         # reward += progress_reward
 
         if progress == 25 and steps <= 53:
-            progress_100_reward = progress/steps * 53 * 5
-        reward += progress_100_reward
+            progress_25_reward = progress/steps * 53 * 5
+            reward += progress_25_reward
 
         if progress == 50 and steps <= 103:
-            progress_100_reward = progress/steps * 103 * 5
-        reward += progress_100_reward
+            progress_50_reward = progress/steps * 103 * 5
+            reward += progress_50_reward
 
         if progress == 75 and steps <= 151:
-            progress_100_reward = progress/steps * 151 * 5
-        reward += progress_100_reward
+            progress_75_reward = progress/steps * 151 * 5
+            reward += progress_75_reward
 
         if progress == 100 and steps <= 201:
             progress_100_reward = progress/steps * 201 * 10
-        reward += progress_100_reward
+            reward += progress_100_reward
             
         # ## Incentive for finishing the lap in less steps ##
         # REWARD_FOR_FASTEST_TIME = 1500 # should be adapted to track length and other rewards
