@@ -1,5 +1,5 @@
 {
-    "batch_size": 128,
+    "batch_size": 64,
     "beta_entropy": 0.01,
     "discount_factor": 0.999,
     "e_greedy_value": 0.05,
