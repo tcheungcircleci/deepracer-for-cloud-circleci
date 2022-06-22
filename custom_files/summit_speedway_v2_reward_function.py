@@ -349,17 +349,17 @@ class Reward:
         distance_reward = max(1e-3, 1 - (dist/(track_width*0.5)))
         reward += distance_reward * DISTANCE_MULTIPLE
 
-        ## Reward if speed is close to optimal speed ##
-        SPEED_DIFF_NO_REWARD = 1.0
-        SPEED_MULTIPLE = 1
-        speed_diff = optimals[2]-speed
-        if -1.0 < speed_diff <= 1.0:
-            # we use quadratic punishment (not linear) bc we're not as confident with the optimal speed
-            # so, we do not punish small deviations from optimal speed
-            speed_reward = 1 - ( speed_diff )**2
-        else:
-            speed_reward = 0
-        reward += speed_reward * SPEED_MULTIPLE
+        # ## Reward if speed is close to optimal speed ##
+        # SPEED_DIFF_NO_REWARD = 1.0
+        # SPEED_MULTIPLE = 1
+        # speed_diff = optimals[2]-speed
+        # if -1.0 < speed_diff <= 1.0:
+        #     # we use quadratic punishment (not linear) bc we're not as confident with the optimal speed
+        #     # so, we do not punish small deviations from optimal speed
+        #     speed_reward = 1 - ( speed_diff )**2
+        # else:
+        #     speed_reward = 0
+        # reward += speed_reward * SPEED_MULTIPLE
 
         # # Reward if less steps
         # REWARD_PER_STEP_FOR_FASTEST_TIME = 1 
@@ -385,10 +385,10 @@ class Reward:
             heading_reward = (-1/20)*direction_diff + 1.5
         reward += heading_reward
             
-        # Zero reward if obviously too slow
-        speed_diff_zero = optimals[2]-speed
-        if speed_diff_zero > 1.0:
-            reward = 1e-3
+        # # Zero reward if obviously too slow
+        # speed_diff_zero = optimals[2]-speed
+        # if speed_diff_zero > 1.0:
+        #     reward = 1e-3
 
         # # progress reward
         # progress_reward = 0
@@ -396,20 +396,20 @@ class Reward:
         #     progress_reward = progress/steps * 10
         # reward += progress_reward
 
-        if progress == 25 and steps <= 57: #53:
-            progress_25_reward = progress/steps * 57 * 5
+        if progress == 25 and steps <= 74: #53:
+            progress_25_reward = progress/steps * 74 * 5
             reward += progress_25_reward
 
-        if progress == 50 and steps <= 104: #103:
-            progress_50_reward = progress/steps * 104 * 5
+        if progress == 50 and steps <= 134: #103:
+            progress_50_reward = progress/steps * 134 * 5
             reward += progress_50_reward
 
-        if progress == 75 and steps <= 151:
-            progress_75_reward = progress/steps * 151 * 5
+        if progress == 75 and steps <= 172: #151:
+            progress_75_reward = progress/steps * 172 * 5
             reward += progress_75_reward
 
-        if progress == 100 and steps <= 201:
-            progress_100_reward = progress/steps * 201 * 10
+        if progress == 100 and steps <= 221: #201:
+            progress_100_reward = progress/steps * 221 * 10
             reward += progress_100_reward
             
         # ## Incentive for finishing the lap in less steps ##
@@ -438,8 +438,8 @@ class Reward:
             print("Distance to racing line: %f" % dist)
             print("=== Distance reward (w/out multiple): %f ===" % (distance_reward))
             print("Optimal speed: %f" % optimals[2])
-            print("Speed difference: %f" % speed_diff)
-            print("=== Speed reward (w/out multiple): %f ===" % speed_reward)
+            # print("Speed difference: %f" % speed_diff)
+            # print("=== Speed reward (w/out multiple): %f ===" % speed_reward)
             # print("Direction difference: %f" % direction_diff)
             # print("Predicted time: %f" % projected_time)
             # print("=== Steps reward: %f ===" % steps_reward)
